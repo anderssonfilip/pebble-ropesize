@@ -1,60 +1,55 @@
-/**
- * Welcome to Pebble.js!
- *
- * This is where you write your app.
- */
 
 var UI = require('ui');
 var Vector2 = require('vector2');
 
-var main = new UI.Card({
-  title: 'Pebble.js',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Hello World!',
-  body: 'Press any button.'
+var window = new UI.Window();
+var rope;
+var text;
+
+function drawRope(size){
+ rope = new UI.Rect({
+  position: new Vector2(72-size/2, 0),
+  size: new Vector2(size,168),
+  backgroundColor: 'white',
 });
 
-main.show();
+window.add(rope);
+window.show(rope);
 
-main.on('click', 'up', function(e) {
-  var menu = new UI.Menu({
-    sections: [{
-      items: [{
-        title: 'Pebble.js',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Can do Menus'
-      }, {
-        title: 'Second Item',
-        subtitle: 'Subtitle Text'
-      }]
-    }]
-  });
-  menu.on('select', function(e) {
-    console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-    console.log('The item is titled "' + e.item.title + '"');
-  });
-  menu.show();
+  
+    text = new UI.Text({
+      text: (size/2).toString() + " mm",
+  position: new Vector2(0, 0),
+      size: new Vector2(72, 15),
+  color: 'red',
+      textAlign: "left"
 });
 
-main.on('click', 'select', function(e) {
-  var wind = new UI.Window({
-    fullscreen: true,
-  });
-  var textfield = new UI.Text({
-    position: new Vector2(0, 65),
-    size: new Vector2(144, 30),
-    font: 'gothic-24-bold',
-    text: 'Text Anywhere!',
-    textAlign: 'center'
-  });
-  wind.add(textfield);
-  wind.show();
+window.add(text);
+window.show(text);
+}
+
+var size = 2;
+drawRope(size);
+
+window.on('click', 'up', function(e) {
+  if(size < 144){
+    window.remove(rope);
+    window.remove(text);
+    size=size+2;
+    drawRope(size);
+  }
 });
 
-main.on('click', 'down', function(e) {
-  var card = new UI.Card();
-  card.title('A Card');
-  card.subtitle('Is a Window');
-  card.body('The simplest window type in Pebble.js.');
-  card.show();
+window.on('click', 'select', function(e) {
+
+});
+
+window.on('click', 'down', function(e) {
+  if(size > 4){
+    window.remove(rope);
+    window.remove(text);
+    size=size-2;
+    drawRope(size);
+  }
 });
